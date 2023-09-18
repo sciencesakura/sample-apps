@@ -1,0 +1,3 @@
+id,email_address,name,status,description,created_at,created_by,updated_at,updated_by
+00000000-0000-0000-0000-000000000001,user01@example.com,User 01,1,,2020-01-01 10:20:30.456,foo,2020-02-01 10:20:30.456,bar
+00000000-0000-0000-0000-000000000002,user02@example.com,User 02,1,Description 02,2020-01-02 10:20:30.456,foo,2020-02-02 10:20:30.456,bar
