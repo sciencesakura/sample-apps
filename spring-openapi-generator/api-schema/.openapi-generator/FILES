@@ -1,0 +1,9 @@
+.openapi-generator-ignore
+README.md
+pom.xml
+src/main/java/com/sciencesakura/sample/api/ApiUtil.java
+src/main/java/com/sciencesakura/sample/api/ItemsApi.java
+src/main/java/com/sciencesakura/sample/api/model/Currency.java
+src/main/java/com/sciencesakura/sample/api/model/ErrorResponse.java
+src/main/java/com/sciencesakura/sample/api/model/ItemObject.java
+src/main/java/com/sciencesakura/sample/api/model/UpdateItemStockRequest.java

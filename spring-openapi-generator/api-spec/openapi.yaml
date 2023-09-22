@@ -1,0 +1,217 @@
+openapi: 3.1.0
+info:
+  title: spring-openapi-generator
+  description: The sample app for Spring Framework and OpenAPI Generator.
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:50001/rest/v1'
+    description: Local server
+paths:
+  /items:
+    get:
+      summary: Get item list
+      operationId: getItemList
+      tags:
+        - item
+      parameters:
+        - name: q
+          in: query
+          description: Text to search
+          required: false
+          schema:
+            type: string
+        - name: p
+          in: query
+          description: 0-based page number
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            default: 0
+        - name: s
+          in: query
+          description: Size of a page
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            default: 20
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ItemObject'
+    post:
+      summary: Create a new item
+      operationId: createItem
+      tags:
+        - item
+      requestBody:
+        description: New item to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemObject'
+      responses:
+        '201':
+          description: Created
+  /items/{code}:
+    get:
+      summary: Get an item
+      operationId: getItem
+      tags:
+        - item
+      parameters:
+        - name: code
+          in: path
+          description: Item code
+          required: true
+          schema:
+            type: string
+            pattern: '[0-9A-Z]{8}'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemObject'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Update an item
+      operationId: updateItem
+      tags:
+        - item
+      parameters:
+        - name: code
+          in: path
+          description: Item code
+          required: true
+          schema:
+            type: string
+            pattern: '[0-9A-Z]{8}'
+      requestBody:
+        description: Item to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemObject'
+      responses:
+        '204':
+          description: No Content
+    delete:
+      summary: Delete an item
+      operationId: deleteItem
+      tags:
+        - item
+      parameters:
+        - name: code
+          in: path
+          description: Item code
+          required: true
+          schema:
+            type: string
+            pattern: '[0-9A-Z]{8}'
+      responses:
+        '204':
+          description: No Content
+  /items/{code}/stock:
+    put:
+      summary: Update the quantity of an item
+      operationId: updateItemStockQuantity
+      tags:
+        - item
+      parameters:
+        - name: code
+          in: path
+          description: Item code
+          required: true
+          schema:
+            type: string
+            pattern: '[0-9A-Z]{8}'
+      requestBody:
+        description: Quantity of stock to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateItemStockRequest'
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ItemObject:
+      type: object
+      properties:
+        code:
+          type: string
+          pattern: '[0-9A-Z]{8}'
+        name:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          maxLength: 1000
+        price:
+          type: number
+          format: double
+          minimum: 0.0
+        currency:
+          $ref: '#/components/schemas/Currency'
+        stock:
+          type: number
+          format: double
+          minimum: 0.0
+          default: 0.0
+      required:
+        - code
+        - name
+        - price
+        - currency
+    UpdateItemStockRequest:
+      type: object
+      properties:
+        quantity:
+          type: number
+          format: double
+      required:
+        - quantity
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        details:
+          type: object
+      required:
+        - message
+    Currency:
+      type: string
+      enum:
+        - USD
+        - EUR
+        - JPY
+        - CNY
+tags:
+  - name: item
+    description: Item API

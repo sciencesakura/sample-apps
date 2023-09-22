@@ -1,0 +1,14 @@
+server:
+  port: 50001
+  servlet:
+    context-path: /rest/v1
+
+spring:
+  flyway:
+    table: FLYWAY_SCHEMA_HISTORY
+  jackson:
+    default-property-inclusion: non_null
+  jpa:
+    open-in-view: false
+  main:
+    banner-mode: off
